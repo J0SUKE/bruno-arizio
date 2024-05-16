@@ -14,29 +14,28 @@ const Onboarding = require('./onboarding')
 const app = require('./config')
 
 const get = (results, request) => {
-  const analytics = process.env.GOOGLE_ANALYTICS
-
   const ua = parser(request.headers['user-agent'])
 
   const functionals = find(results, { type: 'functionals' })
   const meta = find(results, { type: 'meta' })
   const navigation = find(results, { type: 'navigation' })
-  const sharing = find(results, { type: 'sharing' })
-  const social = find(results, { type: 'social' })
+  //const social = find(results, { type: 'social' })
 
   const isDesktop = ua.device.type === undefined
   const isPhone = ua.device.type === 'mobile'
   const isTablet = ua.device.type === 'tablet'
 
   const projectsList = filter(results, { type: 'project' })
-  const { data: { list: projectsOrder } } = find(results, { type: 'ordering' })
 
-  const projects = map(projectsOrder, ({ project : { uid } }) => {
+  const {
+    data: { list: projectsOrder },
+  } = find(results, { type: 'ordering' })
+
+  const projects = map(projectsOrder, ({ project: { uid } }) => {
     return find(projectsList, { uid })
   })
 
   return {
-    analytics,
     functionals,
     isDesktop,
     isPhone,
@@ -44,8 +43,7 @@ const get = (results, request) => {
     meta,
     navigation,
     projects,
-    sharing,
-    social
+    //social,
   }
 }
 
@@ -61,18 +59,20 @@ app.use((request, response, next) => {
 
   Prismic.api(endpoint, {
     accessToken,
-    request
-  }).then(api => {
-    request.prismic = { api }
-
-    next()
-  }).catch(error => {
-    next(error.message)
+    request,
   })
+    .then((api) => {
+      request.prismic = { api }
+
+      next()
+    })
+    .catch((error) => {
+      next(error.message)
+    })
 })
 
 app.get('/', (request, response) => {
-  request.prismic.api.query('', { pageSize : 100 }).then(({ results }) => {
+  request.prismic.api.query('', { pageSize: 100 }).then(({ results }) => {
     const home = find(results, { type: 'home' })
 
     const standard = get(results, request)
@@ -82,7 +82,7 @@ app.get('/', (request, response) => {
 })
 
 app.get('/index', (request, response) => {
-  request.prismic.api.query('', { pageSize : 100 }).then(({ results }) => {
+  request.prismic.api.query('', { pageSize: 100 }).then(({ results }) => {
     const index = find(results, { type: 'index' })
 
     const standard = get(results, request)
@@ -96,7 +96,7 @@ app.get('/index', (request, response) => {
 })
 
 app.get('/about', (request, response) => {
-  request.prismic.api.query('', { pageSize : 100 }).then(({ results }) => {
+  request.prismic.api.query('', { pageSize: 100 }).then(({ results }) => {
     const about = find(results, { type: 'about' })
 
     const standard = get(results, request)
@@ -106,7 +106,7 @@ app.get('/about', (request, response) => {
 })
 
 app.get('/essays', (request, response) => {
-  request.prismic.api.query('', { pageSize : 100 }).then(({ results }) => {
+  request.prismic.api.query('', { pageSize: 100 }).then(({ results }) => {
     const about = find(results, { type: 'about' })
     const essays = find(results, { type: 'essays' })
 
@@ -117,7 +117,7 @@ app.get('/essays', (request, response) => {
 })
 
 app.get('/case/:id', (request, response) => {
-  request.prismic.api.query('', { pageSize : 100 }).then(({ results }) => {
+  request.prismic.api.query('', { pageSize: 100 }).then(({ results }) => {
     const standard = get(results, request)
 
     const { projects } = standard

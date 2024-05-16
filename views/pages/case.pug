@@ -32,7 +32,6 @@ block body
           if (item.slice_type === 'highlight')
             section.case__highlight
               p.case__highlight__text!=`${item.primary.highlight}&nbsp;`
-
           if (item.slice_type === 'video')
             .case__video(style=`padding-top: ${item.primary.height / item.primary.width * 100}%;`)
               video.case__video__media(autoplay loop playsinline muted src=item.primary.mp4)

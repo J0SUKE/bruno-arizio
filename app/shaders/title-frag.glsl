@@ -8,11 +8,11 @@ varying float opacity;
 varying vec2 vUv;
 
 void main() {
-  vec4 texture = texture2D(image, vUv);
+  vec4 tex = texture2D(image, vUv);
 
   vec4 strokeTexture = texture2D(stroke, vUv);
 
-  vec3 mixture  = mix(strokeTexture.rgb, texture.rgb, transition);
+  vec3 mixture  = mix(strokeTexture.rgb, tex.rgb, transition);
 
-  gl_FragColor = vec4(mixture.rgb, mix(strokeTexture.a, texture.a, transition) * opacity);
+  gl_FragColor = vec4(mixture.rgb, mix(strokeTexture.a, tex.a, transition) * opacity);
 }
