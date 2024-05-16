@@ -1,0 +1,5 @@
+to use this project I need to use :
+node v11.15.0 with npm v6.7.0 
+==> ( nvm use 11.15.0) nvm will automatically change the version of both node and npm
+
+once finished using the project, rechange the version of node with nvm
